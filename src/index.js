@@ -30,10 +30,9 @@ const io = new Server(server, {
 
 socket(io);
 
-if (!server.listening) {
+if (!module.parent) {
   server.listen(PORT, () => {
     console.log(`Server is running on Port: http://localhost:${PORT}`);
-  });
-}
+  })};
 
-module.exports = server;
+module.exports = app;

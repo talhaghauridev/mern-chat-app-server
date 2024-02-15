@@ -1,8 +1,11 @@
+let userData;
+
 const socket = (io) => {
   io.on("connection", (socket) => {
-    console.log("Connected to socket.io",socket.id);
+    console.log("Connected to socket.io", socket.id);
 
-    socket.on("setup", (userData) => {
+    socket.on("setup", (data) => {
+      userData = data;
       socket.join(userData?._id);
       console.log(`User Id ${userData?._id}`);
       socket.emit("connected");
@@ -34,4 +37,4 @@ const socket = (io) => {
   });
 };
 
-module.exports = socket
+module.exports = socket;
