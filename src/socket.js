@@ -18,7 +18,6 @@ const socket = (io) => {
     socket.on("typing", (room) => socket.in(room).emit("typing"));
     socket.on("stop_typing", (room) => socket.in(room).emit("stop_typing"));
     socket.on("new_message", (newMessageRecived) => {
-      console.log("newMessageRecived", newMessageRecived);
       const chat = newMessageRecived?.chat;
       if (!chat?.users) {
         return console.log("chat.user is not found");
@@ -26,6 +25,7 @@ const socket = (io) => {
 
       chat?.users?.forEach((user) => {
         if (user?._id == newMessageRecived?.sender?._id) return;
+        console.log("newMessageRecived", newMessageRecived);
 
         socket.in(user?._id).emit("message_recieved", newMessageRecived);
       });
