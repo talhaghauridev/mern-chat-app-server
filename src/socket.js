@@ -25,7 +25,6 @@ const socket = (io) => {
 
       chat?.users?.forEach((user) => {
         if (user?._id == newMessageRecived?.sender?._id) return;
-        console.log("newMessageRecived", newMessageRecived);
 
         socket.in(user?._id).emit("message_recieved", newMessageRecived);
       });

@@ -6,6 +6,7 @@ const connectDB = require("./db/index.js");
 const socket = require("./socket.js");
 const { cloudinayConfig, corsConfig } = require("./config/index.js");
 const { socketAuthenticator } = require("./middlewares/auth.js");
+const { createUser } = require("./seeders/user.js");
 cloudinary.config(cloudinayConfig);
 const PORT = process.env.PORT | 5500;
 

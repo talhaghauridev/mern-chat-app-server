@@ -3,6 +3,8 @@ const catchAsyncError = require("../utils/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
 const User = require("../models/userModel");
 
+const cacheUser = new Map();
+
 exports.isAuthentication = catchAsyncError(async (req, res, next) => {
   const authorizationHeader = req.headers.authorization;
 
@@ -21,16 +23,26 @@ exports.isAuthentication = catchAsyncError(async (req, res, next) => {
   }
 
   try {
-    const decodeData = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decodeData.id);
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+    const isCacheUser = cacheUser.get(decodedData.id);
+    if (isCacheUser) {
+      req.user = isCacheUser;
+      return next();
+    }
+    const user = await User.findById(decodedData.id);
+    if (!user) {
+      return next(
+        new ErrorHandler("Please login to access these resources ", 401)
+      );
+    }
+    cacheUser.set(user.id, user);
+    req.user = user;
     next();
   } catch (error) {
-    console.log(error.stack);
     return next(new ErrorHandler("Invalid token. Please log in again.", 401));
   }
 });
 
-const cacheUser = new Map();
 exports.socketAuthenticator = catchAsyncError(async (socket, next) => {
   const token = socket.handshake.auth.token;
   if (!token) {
