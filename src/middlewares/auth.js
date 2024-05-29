@@ -29,3 +29,30 @@ exports.isAuthentication = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("Invalid token. Please log in again.", 401));
   }
 });
+
+const cacheUser = new Map();
+exports.socketAuthenticator = catchAsyncError(async (socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new ErrorHandler("Please login to access this route", 401));
+  }
+
+  try {
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+    const isCacheUser = cacheUser.get(decodedData.id);
+    if (isCacheUser) {
+      socket.user = isCacheUser;
+      return next();
+    }
+    const user = await User.findById(decodedData.id);
+    if (!user) {
+      return next(new ErrorHandler("Please login to access this route", 401));
+    }
+    cacheUser.set(user.id, user);
+    socket.user = user;
+    next();
+  } catch (error) {
+    console.error("Authentication error:", error.message);
+    return next(new ErrorHandler("Authentication error", 401));
+  }
+});
