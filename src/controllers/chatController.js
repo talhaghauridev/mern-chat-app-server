@@ -62,15 +62,24 @@ const fetchChats = catchAsyncError(async (req, res, next) => {
   })
     .populate("users", "-password")
     .populate("groupAdmin", "-password")
-    .populate("latestMessage")
-    .sort({ updatedAt: -1 })
-    .then(async (results) => {
-      results = await User.populate(results, {
-        path: "latestMessage.sender",
+    .populate({
+      path: "latestMessage",
+      populate: {
+        path: "sender",
         select: "name avatar email",
-      });
+      },
+    })
+    .populate({
+      path: "latestMessage",
+      populate: {
+        path: "chat",
+      },
+    })
+    .sort({ updatedAt: -1 })
+    .then((results) => {
       res.status(200).send(results);
-    });
+    })
+    .catch(next);
 });
 
 //Create Group Chat
