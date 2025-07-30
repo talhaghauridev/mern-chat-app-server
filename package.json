@@ -5,24 +5,28 @@
   "main": "./src/index.js",
   "scripts": {
     "dev": "nodemon ./src/index.js",
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "seed": "node ./src/seeders/index.js",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier --write ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.41.1",
+    "body-parser": "^2.2.0",
+    "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.3",
-    "socket.io": "^4.7.2",
-    "validator": "^13.11.0"
+    "mongoose": "^8.17.0",
+    "socket.io": "^4.8.1",
+    "validator": "^13.15.15"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.1.10"
   }
 }
