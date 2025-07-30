@@ -1,21 +1,22 @@
-const app = require("./app.js");
-const { createServer } = require("http");
-const cloudinary = require("cloudinary");
-const { Server } = require("socket.io");
-const connectDB = require("./db/index.js");
-const socket = require("./socket.js");
-const { cloudinayConfig, corsConfig } = require("./config/index.js");
-const { socketAuthenticator } = require("./middlewares/auth.js");
-const { createUser } = require("./seeders/user.js");
-cloudinary.config(cloudinayConfig);
+import app from "./app.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
+import connectDB from "./db/index.js";
+import socket from "./socket.js";
+import { corsConfig } from "./config/index.js";
+import { socketAuthenticator } from "./middlewares/auth.js";
+import userModel from "./models/userModel.js";
 const PORT = process.env.PORT | 5500;
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+  const users = await userModel.find();
+  console.log({ users });
   res.status(200).json({
     success: true,
     message: "Server is running fine",
   });
 });
+
 const server = createServer(app);
 const io = new Server(server, corsConfig);
 

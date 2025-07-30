@@ -1,8 +1,13 @@
-const { faker } = require("@faker-js/faker");
-const User = require("../models/userModel")
+import { faker } from "@faker-js/faker";
+import User from "../models/userModel.js";
+import dotenv from "dotenv";
+import connectDB from "../db/index.js";
+
+dotenv.config();
 
 const createUser = async (numberUsers) => {
   try {
+    await connectDB();
     const usersPromise = [];
 
     for (let i = 0; i < numberUsers; i++) {
@@ -28,6 +33,4 @@ const createUser = async (numberUsers) => {
   }
 };
 
-module.exports = {
-  createUser,
-};
+export { createUser };

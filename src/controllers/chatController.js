@@ -1,7 +1,7 @@
-const catchAsyncError = require("../utils/catchAsyncError");
-const ErrorHandler = require("../utils/errorHandler");
-const Chat = require("../models/chatModel");
-const User = require("../models/userModel");
+import catchAsyncError from "../utils/catchAsyncError.js";
+import ErrorHandler from "../utils/errorHandler.js";
+import Chat from "../models/chatModel.js";
+import User from "../models/userModel.js";
 
 const accessChat = catchAsyncError(async (req, res, next) => {
   const { userId } = req.body;
@@ -38,10 +38,7 @@ const accessChat = catchAsyncError(async (req, res, next) => {
 
       const createdChat = await Chat.create(chatData);
 
-      const fullChat = await Chat.findOne({ _id: createdChat._id }).populate(
-        "users",
-        "-password"
-      );
+      const fullChat = await Chat.findOne({ _id: createdChat._id }).populate("users", "-password");
 
       if (fullChat) {
         res.status(200).json(fullChat);
@@ -93,12 +90,7 @@ const createGroupChat = catchAsyncError(async (req, res, next) => {
 
   const usersArr = JSON.parse(users);
   if (usersArr.length < 2) {
-    return next(
-      new ErrorHandler(
-        "More than two users are required to from a group chat",
-        400
-      )
-    );
+    return next(new ErrorHandler("More than two users are required to from a group chat", 400));
   }
 
   usersArr.push(req.user);
@@ -199,11 +191,4 @@ const removeFromGroup = catchAsyncError(async (req, res, next) => {
   res.status(200).json(removeUser);
 });
 
-module.exports = {
-  accessChat,
-  fetchChats,
-  createGroupChat,
-  renameGroup,
-  addToGroup,
-  removeFromGroup,
-};
+export { accessChat, fetchChats, createGroupChat, renameGroup, addToGroup, removeFromGroup };

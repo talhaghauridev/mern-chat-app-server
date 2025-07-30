@@ -1,7 +1,11 @@
-const cloudinayConfig = {
+import dotenv from "dotenv";
+
+dotenv.config({ path: "./.env" });
+
+const cloudinaryConfig = {
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_KEY_SECRET,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 };
 
 const corsConfig = {
@@ -12,7 +16,8 @@ const corsConfig = {
   },
 };
 
-module.exports = {
-  cloudinayConfig,
-  corsConfig,
+const bodyParserConfig = {
+  limit: "50mb",
 };
+
+export { cloudinaryConfig, corsConfig, bodyParserConfig };

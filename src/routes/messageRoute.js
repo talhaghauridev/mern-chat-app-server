@@ -1,12 +1,10 @@
-const express = require("express");
-const {
-  sendMessage,
-  allMessages,
-} = require("../controllers/messageController");
-const { isAuthentication } = require("../middlewares/auth");
+import express from "express";
+import { sendMessage, allMessages } from "../controllers/messageController.js";
+import { isAuthentication } from "../middlewares/auth.js";
+
 const router = express.Router();
 
 router.route("/").post(isAuthentication, sendMessage);
 router.route("/:chatId").get(isAuthentication, allMessages);
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
-const catchAsyncError = require("../utils/catchAsyncError");
-const cloudinary = require("cloudinary");
-const User = require("../models/userModel");
-const ErrorHandler = require("../utils/errorHandler");
-const uploadCloudinary = require("../utils/cloudinary");
+import catchAsyncError from "../utils/catchAsyncError.js";
+import cloudinary from "cloudinary";
+import User from "../models/userModel.js";
+import ErrorHandler from "../utils/errorHandler.js";
+import { uploadCloudinary } from "../utils/cloudinary.js";
 
 //Register User
 
@@ -88,8 +88,4 @@ const getAllUsers = catchAsyncError(async (req, res, next) => {
   });
 });
 
-module.exports = {
-  register,
-  login,
-  getAllUsers,
-};
+export { register, login, getAllUsers };

@@ -15,8 +15,13 @@ const socket = (io) => {
       socket.join(room);
       console.log(`User Joined Room ${room}`);
     });
-    socket.on("typing", (room) => socket.in(room).emit("typing"));
-    socket.on("stop_typing", (room) => socket.in(room).emit("stop_typing"));
+    socket.on("typing", (room) => {
+      socket.to(room).emit("typing", room);
+    });
+
+    socket.on("stop_typing", (room) => {
+      socket.to(room).emit("stop_typing", room);
+    });
     socket.on("new_message", (newMessageRecived) => {
       const chat = newMessageRecived?.chat;
       if (!chat?.users) {
@@ -36,4 +41,4 @@ const socket = (io) => {
   });
 };
 
-module.exports = socket;
+export default socket;

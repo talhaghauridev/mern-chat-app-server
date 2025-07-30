@@ -1,10 +1,8 @@
-const catchAsyncError = require("../utils/catchAsyncError");
-const Message = require("../models/messageModel");
-const User = require("../models/userModel");
-const Chat = require("../models/chatModel");
-const ErrorHandler = require("../utils/errorHandler");
-
-
+import catchAsyncError from "../utils/catchAsyncError.js";
+import Message from "../models/messageModel.js";
+import User from "../models/userModel.js";
+import Chat from "../models/chatModel.js";
+import ErrorHandler from "../utils/errorHandler.js";
 
 const sendMessage = catchAsyncError(async (req, res, next) => {
   const { content, chatId } = req.body;
@@ -50,8 +48,4 @@ const allMessages = catchAsyncError(async (req, res, next) => {
   res.status(200).json(message);
 });
 
-
-module.exports = {
-  sendMessage,
-  allMessages
-}
+export { sendMessage, allMessages };

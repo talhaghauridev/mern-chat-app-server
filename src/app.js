@@ -1,23 +1,22 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const errorMiddlewares = require("./middlewares/error");
+import express from "express";
+import dotenv from "dotenv";
+import errorMiddlewares from "./middlewares/error.js";
+import { corsConfig, bodyParserConfig } from "./config/index.js";
+import bodyParser from "body-parser";
+import cors from "cors";
 
 const app = express();
 
 dotenv.config({ path: "./.env" });
 
-app.use(cors({
-    origin:process.env.FRONTEND_URL,
-    credentials:true
-}));
-app.use(express.json());
+app.use(cors(corsConfig));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
+app.use(bodyParser.json(bodyParserConfig));
 
-//Routes Import
-
-const user = require("./routes/userRoute");
-const chat = require("./routes/chatRoute");
-const message = require("./routes/messageRoute");
+// Routes Import
+import user from "./routes/userRoute.js";
+import chat from "./routes/chatRoute.js";
+import message from "./routes/messageRoute.js";
 
 app.use("/api/v1/user", user);
 app.use("/api/v1/chat", chat);
@@ -26,4 +25,4 @@ app.use("/api/v1/message", message);
 //Error middleware
 app.use(errorMiddlewares);
 
-module.exports = app;
+export default app;

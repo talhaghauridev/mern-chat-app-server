@@ -1,5 +1,3 @@
-const DB_NAME = "mern-chat-app"
+const DB_NAME = "mern-chat-app";
 
-
-
-module.exports = {DB_NAME}
+export { DB_NAME };

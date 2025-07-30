@@ -1,25 +1,21 @@
-const jwt = require("jsonwebtoken");
-const catchAsyncError = require("../utils/catchAsyncError");
-const ErrorHandler = require("../utils/errorHandler");
-const User = require("../models/userModel");
+import jwt from "jsonwebtoken";
+import catchAsyncError from "../utils/catchAsyncError.js";
+import ErrorHandler from "../utils/errorHandler.js";
+import User from "../models/userModel.js";
 
 const cacheUser = new Map();
 
-exports.isAuthentication = catchAsyncError(async (req, res, next) => {
+export const isAuthentication = catchAsyncError(async (req, res, next) => {
   const authorizationHeader = req.headers.authorization;
 
   if (!authorizationHeader) {
-    return next(
-      new ErrorHandler("Please Login to access these resources ", 401)
-    );
+    return next(new ErrorHandler("Please Login to access these resources ", 401));
   }
 
   const token = authorizationHeader.replace("Bearer ", "");
 
   if (!token) {
-    return next(
-      new ErrorHandler("Please Login to access these resources ", 401)
-    );
+    return next(new ErrorHandler("Please Login to access these resources ", 401));
   }
 
   try {
@@ -31,9 +27,7 @@ exports.isAuthentication = catchAsyncError(async (req, res, next) => {
     }
     const user = await User.findById(decodedData.id);
     if (!user) {
-      return next(
-        new ErrorHandler("Please login to access these resources ", 401)
-      );
+      return next(new ErrorHandler("Please login to access these resources ", 401));
     }
     cacheUser.set(user.id, user);
     req.user = user;
@@ -43,7 +37,7 @@ exports.isAuthentication = catchAsyncError(async (req, res, next) => {
   }
 });
 
-exports.socketAuthenticator = catchAsyncError(async (socket, next) => {
+export const socketAuthenticator = catchAsyncError(async (socket, next) => {
   const token = socket.handshake.auth.token;
   if (!token) {
     return next(new ErrorHandler("Please login to access this route", 401));
