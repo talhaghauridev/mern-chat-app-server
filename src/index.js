@@ -1,16 +1,13 @@
-import app from "./app.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import connectDB from "./db/index.js";
-import socket from "./socket.js";
+import app from "./app.js";
 import { corsConfig } from "./config/index.js";
+import connectDB from "./db/index.js";
 import { socketAuthenticator } from "./middlewares/auth.js";
-import userModel from "./models/userModel.js";
+import socket from "./socket.js";
 const PORT = process.env.PORT | 5500;
 
 app.get("/", async (req, res) => {
-  const users = await userModel.find();
-  console.log({ users });
   res.status(200).json({
     success: true,
     message: "Server is running fine",
